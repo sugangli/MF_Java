@@ -20,6 +20,7 @@ import java.util.Properties;
 public class WebCamProperties {
 
     private static final String DEFAULT_START_GUID = "262144"; // 0x40000
+    public static final String SETTING_MY_GUID = "myGUID";
     public static final String SETTING_NEXT_GUID = "nextGUID";
     public static final String DEFAULT_RESULT_FOLDER = "videos";
     public static final String SETTING_RESULT_FOLDER = "resultFolder";
@@ -37,6 +38,7 @@ public class WebCamProperties {
             System.out.printf("Error in reading properties file: %s%n", fileName);
             ex.printStackTrace(System.out);
         }
+        System.out.printf("MyGUID: %s%n", getMyGUID());
         System.out.printf("NextGUID: %s%n", getNextGUID());
         System.out.printf("VideoFolder: %s%n", getVideoFolder());
         System.out.printf("Clients: %s%n", Arrays.toString(getClients()));
@@ -51,6 +53,17 @@ public class WebCamProperties {
             ex.printStackTrace(System.out);
             settings.setProperty(SETTING_NEXT_GUID, DEFAULT_START_GUID);
             return new GUID(Integer.parseInt(DEFAULT_START_GUID));
+        }
+    }
+    
+    public GUID getMyGUID() {
+        try {
+            String strMyGUID = settings.getProperty(SETTING_MY_GUID);
+            return new GUID(Integer.parseInt(strMyGUID));
+        } catch (Exception ex) {
+            System.out.printf("Error in getting my GUID%n");
+            ex.printStackTrace(System.out);
+            throw new RuntimeException("Error in getting my GUID");
         }
     }
 

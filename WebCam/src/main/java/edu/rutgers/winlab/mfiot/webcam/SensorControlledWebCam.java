@@ -33,7 +33,7 @@ import java.util.logging.Logger;
  */
 public class SensorControlledWebCam implements Runnable {
 
-    private static final int MY_GUID = 0x10102;
+//    private static final int MY_GUID = 0x10102;
     private static final int MAX_MSG_SIZE = 10 * 1024 * 1024;
     private static final long RECORDING_TIMEOUT = 3000; // 3 seconds
 
@@ -42,6 +42,7 @@ public class SensorControlledWebCam implements Runnable {
     private final LinkedBlockingDeque<GUID> savedChunks = new LinkedBlockingDeque<>();
     private final HashMap<GUID, LinkedList<GUID>> pendingRequests = new HashMap<>();
     private final WebCamProperties properties = new WebCamProperties();
+    private final GUID myGUID;
 //    private final Timer timerRecordingTimeout = new Timer("RecordingTimeout");
     private final ScheduledExecutorService recordingTimeoutExecutor = Executors.newSingleThreadScheduledExecutor();
 
@@ -53,6 +54,7 @@ public class SensorControlledWebCam implements Runnable {
         this.settingFileName = settingFileName;
         properties.load(settingFileName);
         clients = properties.getClients();
+        myGUID = properties.getMyGUID();
 
         videoCapturer = new VideoCapturer(new File(properties.getVideoFolder()), properties.getNextGUID());
         videoCapturer.addChunkSavedHandler(new IGUIDHandler() {
@@ -63,7 +65,7 @@ public class SensorControlledWebCam implements Runnable {
         });
 
         handle = new JMFAPI();
-        handle.jmfopen("basic", new GUID(MY_GUID));
+        handle.jmfopen("basic", myGUID);
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
 
