@@ -78,9 +78,9 @@ public class MFChunkLoader implements ChunkLoader {
                                     hs = handlers.remove(c.guid);
                                 }
                                 if (hs != null) {
-                                  for (ChunkLoadedHandler h : hs) {
-                                      h.chunkLoaded(c);
-                                  }
+                                    for (ChunkLoadedHandler h : hs) {
+                                        h.chunkLoaded(c);
+                                    }
                                 }
                             } catch (IOException ex) {
                                 Logger.getLogger(MFChunkLoader.class.getName()).log(Level.SEVERE, null, ex);
